@@ -62,7 +62,7 @@ Modified boot arguments must be passed to the kernel by modifying the system-use
 
     	chosen{
 		bootargs="console=ttyPS0,115200 earlycon root=/dev/nfs nfsroot=192.168.1.109:/home/NFSshare,nfsvers=3,tcp ip=dhcp rw";
-	};
+    };
 
     * found in *project-spec/meta-user/recipes-bsp/device-tree/files*
 
