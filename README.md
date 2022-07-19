@@ -14,7 +14,7 @@ The hardware platform this project runs on is the Zedboard from Digilent.
 This section covers all project configuration changes.
 
 
-<h3 align="left"> U-boot Env Vars 3</h3>
+<h3 align="left"> U-boot Env Vars</h3>
 
 In this process the u-boot varaible updates are implemented statically at build time. This is accomplished by editing the u-boot-xlnx source code. TFTP requires *ipaddr* and *serverip* are set correctly when u-boot launches on the target. The approach with the current toolchain is to use *petalinux-devtool* to create a u-boot-xlinx source directory, edit the source code and when finished create a patch file that petalinux can use.
 
@@ -56,6 +56,8 @@ For this u-boot example, the patch file will be placed in */recipes-bsp/u-boot/f
 
 <h3 align="left">BOOT ARGS</h3>
 
+<h4 align="left">Approach 1</h4>
+
 Modified boot arguments must be passed to the kernel by modifying the system-user.dtsi file. The missing bootarg *nfsvers=3* causes nfs rootfs failure when booting and it doesn't seem *petalinux-config* implements this needed update.
 
 * modify the system-user.dtsi file
@@ -70,10 +72,14 @@ The system-user.dtsi file is automatically pulled in by the *device-tree.bbappen
 
 
 
+<h4 align="left">Approach 2</h4>
 
+This approach uses the device-tree.bbappend to patch the bootargs in the device tree.  It consists of modifying *project-spec/meta-user/recipes-bsp/device-tree/device-tree.bbappend* and adding the following line.
 
+    # Append nfsvers=3 to bootargs
+    sed -i '/bootargs =/s/,tcp/&,nfsvers=3/' ${DT_FILES_PATH}/system-conf.dtsi
 
-
+Link to Xilinx forum post: [forum post](https://support.xilinx.com/s/question/0D52E00006iHpx0SAC/nfs-boot-zynq-ultrascale-mpsoc)
 
 
 
